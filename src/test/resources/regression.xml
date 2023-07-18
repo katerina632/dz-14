@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Use tests automation">
+
+    <test name="Smoke testing">
+        <classes>
+            <class name="tests.ButtonsTest"/>
+            <class name="tests.WebTablesTests"/>
+        </classes>
+
+    </test>
+</suite>
