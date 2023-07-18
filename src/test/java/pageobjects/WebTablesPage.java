@@ -10,11 +10,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class WebTablesPage extends AbstractPageObject {
-    private final By uploadAndDownload = By.xpath("(//*[@id=\"item-6\"])[1]");
-    private final List<Employee> employeeList = new ArrayList<>();
-    private final String tableGroupRow = "//*[@class='rt-tr-group']";
-    private final String groupRowClassName = "//*[@class = 'rt-td']";
-
+    private final By ADS_WIDGETS = By.xpath("(//*[@id=\"item-6\"])[1]");
+    private final List<Employee> RECORDS_LIST = new ArrayList<>();
     private final By EMPTY_ROW = By.xpath("//*[contains(@class, 'rt-tr -padRow')]");
     private final By ADD_BUTTON = By.xpath("//*[@id=\"addNewRecordButton\"]");
     private final By FIST_NAME_FIELD = By.xpath("//*[@id=\"firstName\"]");
@@ -28,9 +25,12 @@ public class WebTablesPage extends AbstractPageObject {
     private final By NEXT_BUTTON = By.xpath("//button[text()=\"Next\"]");
     private final By TOTAL_PAGES = By.xpath("//*[@class='-totalPages']");
     ////*[@id='edit-record-1']
-    private String editButton = "//*[@id='edit-record-";
+    private final String EDIT_BUTTON = "//*[@id='edit-record-";
     ////*[@id='delete-record-1']
-    private String deleteButton = "//*[@id='delete-record-";
+    private final  String DELETE_BUTTON = "//*[@id='delete-record-";
+
+    private final String TABLE_GROUP_ROW = "//*[@class='rt-tr-group']";
+    private final String GROUP_ROW_CLASS_NAME = "//*[@class = 'rt-td']";
 
 
     public WebTablesPage(WebDriver driver) {
@@ -39,7 +39,7 @@ public class WebTablesPage extends AbstractPageObject {
     }
 
     public WebTablesPage clickAddButton() {
-        adsScrollHandler(uploadAndDownload);
+        adsScrollHandler(ADS_WIDGETS);
         getElement(ADD_BUTTON,6).click();
         return this;
     }
@@ -73,16 +73,16 @@ public class WebTablesPage extends AbstractPageObject {
 
                 Employee employee = new Employee() {
                     {
-                        this.setFirstName(getElement(By.xpath(String.format("%s[%d]%s[%d]", tableGroupRow, numberOfGroup, groupRowClassName, 1))).getText());
-                        this.setLastName(getElement(By.xpath(String.format("%s[%d]%s[%d]", tableGroupRow, numberOfGroup, groupRowClassName, 2))).getText());
-                        this.setAge(getElement(By.xpath(String.format("%s[%d]%s[%d]", tableGroupRow, numberOfGroup, groupRowClassName, 3))).getText());
-                        this.setEmail(getElement(By.xpath(String.format("%s[%d]%s[%d]", tableGroupRow, numberOfGroup, groupRowClassName, 4))).getText());
-                        this.setSalary(getElement(By.xpath(String.format("%s[%d]%s[%d]", tableGroupRow, numberOfGroup, groupRowClassName, 5))).getText());
-                        this.setDepartment(getElement(By.xpath(String.format("%s[%d]%s[%d]", tableGroupRow, numberOfGroup, groupRowClassName, 6))).getText());
+                        this.setFirstName(getElement(By.xpath(String.format("%s[%d]%s[%d]", TABLE_GROUP_ROW, numberOfGroup, GROUP_ROW_CLASS_NAME, 1))).getText());
+                        this.setLastName(getElement(By.xpath(String.format("%s[%d]%s[%d]", TABLE_GROUP_ROW, numberOfGroup, GROUP_ROW_CLASS_NAME, 2))).getText());
+                        this.setAge(getElement(By.xpath(String.format("%s[%d]%s[%d]", TABLE_GROUP_ROW, numberOfGroup, GROUP_ROW_CLASS_NAME, 3))).getText());
+                        this.setEmail(getElement(By.xpath(String.format("%s[%d]%s[%d]", TABLE_GROUP_ROW, numberOfGroup, GROUP_ROW_CLASS_NAME, 4))).getText());
+                        this.setSalary(getElement(By.xpath(String.format("%s[%d]%s[%d]", TABLE_GROUP_ROW, numberOfGroup, GROUP_ROW_CLASS_NAME, 5))).getText());
+                        this.setDepartment(getElement(By.xpath(String.format("%s[%d]%s[%d]", TABLE_GROUP_ROW, numberOfGroup, GROUP_ROW_CLASS_NAME, 6))).getText());
                     }
                 };
 
-                employeeList.add(employee);
+                RECORDS_LIST.add(employee);
             }
             if (getElement(NEXT_BUTTON).isEnabled() && countOfEmptyRows == 0)
                 getElement(NEXT_BUTTON).click();
@@ -91,8 +91,8 @@ public class WebTablesPage extends AbstractPageObject {
     }
 
     public int findRecord(String email) {
-        return IntStream.range(0, employeeList.size())
-                .filter(i -> employeeList.get(i).getEmail().equals(email))
+        return IntStream.range(0, RECORDS_LIST.size())
+                .filter(i -> RECORDS_LIST.get(i).getEmail().equals(email))
                 .findFirst()
                 .orElse(-1);
     }
@@ -106,7 +106,7 @@ public class WebTablesPage extends AbstractPageObject {
             int countOfPages = Integer.parseInt(getElement(TOTAL_PAGES).getText());
 
                 for (int k = 1; k <= countOfPages; k++) {
-                    WebElement rowItem = getElement(By.xpath(String.format("%s%d']", deleteButton, numberOfRecord + 1)));
+                    WebElement rowItem = getElement(By.xpath(String.format("%s%d']", DELETE_BUTTON, numberOfRecord + 1)));
                     if (rowItem != null) {
                         rowItem.click();
 
@@ -118,8 +118,6 @@ public class WebTablesPage extends AbstractPageObject {
 
             } else
             throw new RuntimeException("Such a record does not exist.");
-
-
     }
 
     ////*[@id='edit-record-,4']
@@ -129,9 +127,9 @@ public class WebTablesPage extends AbstractPageObject {
         int countOfPages = Integer.parseInt(getElement(TOTAL_PAGES).getText());
 
         if (numberOfRecord != -1) {
-            employeeList.get(numberOfRecord).setEmail(newEmail);
+            RECORDS_LIST.get(numberOfRecord).setEmail(newEmail);
             for (int k = 1; k <= countOfPages; k++) {
-                WebElement rowItem = getElement(By.xpath(String.format("%s%d']", editButton, numberOfRecord+1)));
+                WebElement rowItem = getElement(By.xpath(String.format("%s%d']", EDIT_BUTTON, numberOfRecord+1)));
                 if (rowItem != null) {
                     rowItem.click();
                     getElement(EMAIL_FIELD).clear();

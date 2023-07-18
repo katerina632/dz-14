@@ -4,8 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class ElementsPage extends  AbstractPageObject{
-    private final By adsWidgets  = By.xpath("//*[@id=\"app\"]/div/div/div[2]/div[1]/div/div/div[4]/span/div");
-    private final By buttonTab = By.xpath("//*[@id='item-4']");
+    private final By ADS_WIDGET  = By.xpath("//*[@id=\"app\"]/div/div/div[2]/div[1]/div/div/div[4]/span/div");
+    private final By BUTTON_TAB = By.xpath("//*[@id='item-4']");
 
     public ElementsPage(WebDriver driver) {
         super(driver);
@@ -13,8 +13,8 @@ public class ElementsPage extends  AbstractPageObject{
     }
 
     public ButtonsPage clickButtonsTab(){
-        adsScrollHandler(adsWidgets);
-        getElement(buttonTab,10).click();
+        adsScrollHandler(ADS_WIDGET);
+        getElement(BUTTON_TAB,10).click();
         return new ButtonsPage(driver);
     }
 
